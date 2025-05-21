@@ -7,25 +7,25 @@ const canvasCtx    = document.getElementById("sentiment-chart").getContext("2d")
 
 // 1) Функція завантаження даних
 async function loadData() {
-  try {
-    // 1.1) Підтягуємо новини
-    await fetch(`${API_BASE}/fetch/${STUDENT_ID}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" }
-    });
+try {
+// 1.1) Підтягуємо новини
+await fetch(`${API_BASE}/fetch/${STUDENT_ID}`, {
+method: "POST",
+headers: { "Content-Type": "application/json" }
+});
 
-    // 1.2) Аналіз тональності
-    const res = await fetch(`${API_BASE}/analyze/${STUDENT_ID}`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" }
-    });
-    const data = await res.json();
+// 1.2) Аналіз тональності
+const res = await fetch(`${API_BASE}/analyze/${STUDENT_ID}`, {
+method: "POST",
+headers: { "Content-Type": "application/json" }
+});
+const data = await res.json();
 
-    // 1.3) Зберігаємо у allArticles
-    allArticles = data.articles.map(a => ({
-      ...a,
-      date: a.published ? new Date(a.published) : new Date()
-    }));
+// 1.3) Зберігаємо у allArticles
+allArticles = data.articles.map(a => ({
+...a,
+date: a.published ? new Date(a.published) : new Date()
+}));
 
     // Рендеримо вміст
     render();

@@ -15,3 +15,4 @@ def test_add_and_get_source():
     assert "<https://example.com/rss>" in res1.json()["sources"]
     res2 = client.get(f"/sources/{STUDENT_ID}")
     assert res2.json()["sources"] == ["<https://example.com/rss>"]
+

@@ -1,9 +1,1 @@
-<<<<<<< HEAD
 Kim
-=======
-<<<<<<< HEAD
-Kim
-=======
-"Kim" 
->>>>>>> 789caf0 (Initial project structure: backend, frontend, Docker, tests222)
->>>>>>> ea284dd (Initial project structure: backend, frontend, Docker, tests)

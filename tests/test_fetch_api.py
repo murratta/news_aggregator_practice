@@ -2,24 +2,6 @@ from fastapi.testclient import TestClient
 from backend.app import app, news_store
 from config import STUDENT_ID
 import feedparser
-from backend.app import store, news_store
-
-
-client = TestClient(app)
-
-def test_fetch_custom_feed(monkeypatch):
-    news_store.clear()
-    store.clear()
-
-    client.post(f"/sources/{STUDENT_ID}", json={"url": "http://test.com/rss"})
-
-    class DummyFeed:
-        entries = [{"title": "X", "link": "L", "published": "2025-04-28"}]
-
-    monkeypatch.setattr(feedparser, "parse", lambda *args, **kwargs: DummyFeed)
-
-    r = client.post(f"/fetch/{STUDENT_ID}")
-    assert r.json() == {"fetched": 1}
 
 client = TestClient(app)
 
