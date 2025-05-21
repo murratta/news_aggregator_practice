@@ -2,10 +2,6 @@ from fastapi.testclient import TestClient
 from backend.app import app, news_store
 from config import STUDENT_ID
 import feedparser
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
->>>>>>> ea284dd (Initial project structure: backend, frontend, Docker, tests)
 from backend.app import store, news_store
 
 
@@ -24,11 +20,6 @@ def test_fetch_custom_feed(monkeypatch):
 
     r = client.post(f"/fetch/{STUDENT_ID}")
     assert r.json() == {"fetched": 1}
-
-
-<<<<<<< HEAD
-=======
-=======
 
 client = TestClient(app)
 
@@ -62,5 +53,3 @@ def test_fetch_and_get(monkeypatch):
             {"title": "T2", "link": "<http://b>", "published": ""}
         ]
     }
->>>>>>> 789caf0 (Initial project structure: backend, frontend, Docker, tests222)
->>>>>>> ea284dd (Initial project structure: backend, frontend, Docker, tests)
