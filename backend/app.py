@@ -11,6 +11,7 @@ origins = [
     # можно добавить сюда и другие адреса, с которых разрешаешь запросы
     # Це просто коментар для тестування CI
 ]
+sources_store = {}
 app = FastAPI()
 news_store = {STUDENT_ID: []}
 analyzer = SentimentIntensityAnalyzer()
@@ -22,6 +23,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+fake_users_db = {
+STUDENT_ID: {
+"username": STUDENT_ID,
+"full_name": STUDENT_ID,
+"hashed_password": "password123",  # нерекомендовано зберігати так на проді
+"disabled": False,
+}
+}
+
 
 # Пам'ять для збереження джерел (для кожного STUDENT_ID окремо)
 store = {STUDENT_ID: SOURCES.copy()}
@@ -39,8 +49,17 @@ def add_source(student_id: str, payload: dict):
     url = payload.get("url")
     if not url:
         raise HTTPException(status_code=400, detail="URL is required")
+    if student_id not in store:
+        store[student_id] = []
     store[student_id].append(url)
     return {"sources": store[student_id]}
+@app.delete("/sources/{student_id}")
+def delete_sources(student_id: str):
+    if student_id not in store:
+        raise HTTPException(status_code=404, detail="Student not found")
+    store[student_id] = []
+    return {"sources": store[student_id]}
+
 
 @app.post("/fetch/{student_id}")
 def fetch_news(student_id: str):
@@ -84,3 +103,13 @@ def analyze_tone(student_id: str):
         # Додаємо поля "sentiment" і "scores" в копію статті
         result.append({**art, "sentiment": label, "scores": scores})
     return {"analyzed": len(result), "articles": result}
+@app.get("/info")
+def get_info():
+    return {"student_id": STUDENT_ID}
+@app.on_event("startup")
+async def load_initial_sources() -> None:
+    student_id = getattr(config, "STUDENT_ID", None)
+    sources    = getattr(config, "SOURCES", [])
+    if student_id and isinstance(sources, list):
+        sources_store[student_id] = list(sources)
+        print(f"[startup] loaded {len(sources)} feeds for {student_id}")

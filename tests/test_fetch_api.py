@@ -4,7 +4,7 @@ from config import STUDENT_ID
 import feedparser
 
 client = TestClient(app)
-
+sources_store = {}
 def test_get_news_empty():
     # Порожній початковий стан
     news_store[STUDENT_ID] = []
